@@ -1,0 +1,41 @@
+
+<div class="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white">
+
+  <header class="flex justify-between items-center px-8 py-5 bg-white/10 backdrop-blur-md border-b border-white/10 shadow-lg">
+    <div class="flex items-center space-x-3">
+      <img src="assets/logo.png" alt="Logo" class="h-10 w-10 rounded-full border border-white/30">
+      <h1 class="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+        Gestión de Procesos
+      </h1>
+    </div>
+
+    <nav class="hidden sm:flex space-x-8 text-sm">
+      <a routerLink="/login" class="hover:text-blue-400 transition">Inicio de Sesión</a>
+      <a routerLink="/registro" class="hover:text-cyan-400 transition">Registro</a>
+      <a href="#" class="hover:text-blue-300 transition">Acerca</a>
+      <a href="#" class="hover:text-cyan-300 transition">Soporte</a>
+    </nav>
+  </header>
+
+  <main class="flex flex-col items-center justify-center flex-grow text-center px-6 py-20">
+    <h2 class="text-6xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+      Bienvenido al Portal de Gestión de Procesos
+    </h2>
+
+    <p class="text-lg text-gray-200 max-w-2xl mb-12">
+      Centraliza la administración de tus procesos, accede a tus servicios y mejora la eficiencia de tu organización con una interfaz moderna e intuitiva.
+    </p>
+
+    <div class="flex flex-col sm:flex-row justify-center gap-8">
+      <a routerLink="/login"
+         class="px-10 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-blue-500/40 hover:scale-105 transition-all duration-300">
+        Iniciar Sesión
+      </a>
+      <a routerLink="/registro"
+         class="px-10 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-emerald-500/40 hover:scale-105 transition-all duration-300">
+        Crear Cuenta
+      </a>
+    </div>
+  </main>
+  <app-footer></app-footer>
+</div>

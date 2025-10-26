@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
-import { ElementTemplate } from '../../../models/DiagramElement.model';
+import { ElementTemplate, ELEMENT_TYPE_CONFIGS, DiagramElementType } from '../../../models/DiagramElement.model';
 
 /**
  * Componente Sidebar
@@ -12,7 +12,7 @@ import { ElementTemplate } from '../../../models/DiagramElement.model';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, CdkDrag, CdkDropList], // Agregado CdkDropList
+  imports: [CommonModule, CdkDrag, CdkDropList],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
@@ -24,50 +24,37 @@ export class SidebarComponent {
 
   /**
    * Plantillas de elementos disponibles para arrastrar al diagrama
+   * Generadas automáticamente desde la configuración
    */
-  availableElements: ElementTemplate[] = [
-    {
-      type: 'inicio',
-      label: 'Inicio',
-      style: {
-        backgroundColor: '#4caf50',
-        width: 120,
-        height: 60
-      }
-    },
-    {
-      type: 'proceso',
-      label: 'Proceso',
-      style: {
-        backgroundColor: '#90caf9',
-        width: 120,
-        height: 60
-      }
-    },
-    {
-      type: 'decision',
-      label: 'Decisión',
-      style: {
-        backgroundColor: '#ffb74d',
-        width: 120,
-        height: 80
-      }
-    },
-    {
-      type: 'fin',
-      label: 'Fin',
-      style: {
-        backgroundColor: '#ef5350',
-        width: 120,
-        height: 60
-      }
-    }
-  ];
+  availableElements: ElementTemplate[] = this.generateAvailableElements();
 
   /**
    * Estado del sidebar (expandido/colapsado)
    */
   isExpanded: boolean = true;
+
+  /**
+   * Genera las plantillas de elementos desde la configuración
+   */
+  private generateAvailableElements(): ElementTemplate[] {
+    // Puedes definir qué tipos quieres mostrar en el sidebar
+    const typesToShow: DiagramElementType[] = ['inicio', 'actividad', 'decision', 'fin'];
+    
+    return typesToShow.map(type => {
+      const config = ELEMENT_TYPE_CONFIGS[type];
+      return {
+        type: config.type,
+        label: config.defaultLabel,
+        icon: config.icon,
+        style: {
+          backgroundColor: config.backgroundColor,
+          width: config.width,
+          height: config.height
+        },
+        createDomainData: config.createDomainData
+      };
+    });
+  }
 
   /**
    * Toggle para expandir/colapsar el sidebar

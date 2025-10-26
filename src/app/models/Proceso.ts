@@ -1,4 +1,4 @@
-import {Actividad  } from './Actividad';
+import {Actividad  } from './Actividad.model';
 import { Empresa } from './Empresa';
 import { Edge } from './Edge';
 import { Gateway } from './Gateway';

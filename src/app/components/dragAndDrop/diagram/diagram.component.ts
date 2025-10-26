@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { newInstance, BrowserJsPlumbInstance } from '@jsplumb/browser-ui';
 import { DiagramElement, DiagramConnection, DiagramData, ElementTemplate } from '../../../models/DiagramElement.model';
+import { Actividad } from '../../../models/Actividad.model';
 
 /**
- * Componente Diagram de diagram.component.ts
+ * Componente Diagram
  * 
  * Lienzo principal donde se crean y conectan los elementos del diagrama.
  * Maneja el drag & drop desde el sidebar y las conexiones jsPlumb.
@@ -79,6 +80,14 @@ export class DiagramComponent implements AfterViewInit, OnDestroy {
     // Obtener las dimensiones del contenedor para calcular la posición correcta
     const containerRect = this.diagramContainer.nativeElement.getBoundingClientRect();
 
+    // Crear los datos del dominio si el template tiene un factory
+    const domainData = template.createDomainData ? template.createDomainData() : null;
+    
+    // Si es una actividad, asignarle un ID secuencial
+    if (domainData instanceof Actividad) {
+      domainData.idActividad = this.elementCounter + 1;
+    }
+
     // Crear nuevo elemento en el diagrama
     const newElement: DiagramElement = {
       id: `element-${++this.elementCounter}`,
@@ -88,10 +97,17 @@ export class DiagramComponent implements AfterViewInit, OnDestroy {
         x: dropPosition.x - containerRect.left - (template.style.width / 2),
         y: dropPosition.y - containerRect.top - (template.style.height / 2)
       },
-      style: template.style
+      style: template.style,
+      data: domainData // Aquí se inyecta la instancia del modelo de dominio
     };
 
     this.diagramElements.push(newElement);
+
+    // Log para debug - ver los datos del dominio
+    console.log('Elemento creado:', newElement);
+    if (newElement.data instanceof Actividad) {
+      console.log('Actividad asociada:', newElement.data);
+    }
 
     // Esperar a que Angular renderice el elemento antes de configurar jsPlumb
     setTimeout(() => {
@@ -116,7 +132,7 @@ export class DiagramComponent implements AfterViewInit, OnDestroy {
     this.jsPlumbInstance.addEndpoint(element, {
       endpoint: { type: 'Dot', options: { radius: 6 } },
       anchor: 'Right',
-      source: true,  // Cambiado de isSource a source
+      source: true,
       target: false,
       maxConnections: -1,
       paintStyle: { fill: '#4CAF50' },
@@ -128,7 +144,7 @@ export class DiagramComponent implements AfterViewInit, OnDestroy {
       endpoint: { type: 'Dot', options: { radius: 6 } },
       anchor: 'Left',
       source: false,
-      target: true,  // Cambiado de isTarget a target
+      target: true,
       maxConnections: -1,
       paintStyle: { fill: '#2196F3' },
       hoverPaintStyle: { fill: '#1976D2' }
@@ -214,10 +230,20 @@ export class DiagramComponent implements AfterViewInit, OnDestroy {
 
   /**
    * Exporta el diagrama a JSON
+   * Incluye los datos del dominio de cada elemento
    */
   exportToJSON(): DiagramData {
     return {
-      elements: this.diagramElements,
+      elements: this.diagramElements.map(el => ({
+        ...el,
+        // Serializar los datos del dominio
+        data: el.data instanceof Actividad ? {
+          idActividad: el.data.idActividad,
+          nombre: el.data.nombre,
+          descripcion: el.data.descripcion,
+          tipo: el.data.tipo
+        } : el.data
+      })),
       connections: this.connections,
       metadata: {
         createdAt: new Date(),
@@ -262,5 +288,25 @@ export class DiagramComponent implements AfterViewInit, OnDestroy {
     a.download = `diagrama-${Date.now()}.json`;
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Obtiene los datos del dominio de un elemento
+   * Útil para editar las propiedades de una actividad, por ejemplo
+   */
+  getElementDomainData(elementId: string): Actividad | null {
+    const element = this.diagramElements.find(el => el.id === elementId);
+    return element?.data instanceof Actividad ? element.data : null;
+  }
+
+  /**
+   * Actualiza los datos del dominio de un elemento
+   */
+  updateElementDomainData(elementId: string, newData: Actividad): void {
+    const element = this.diagramElements.find(el => el.id === elementId);
+    if (element && element.data instanceof Actividad) {
+      element.data = newData;
+      console.log('Datos de dominio actualizados:', element);
+    }
   }
 }

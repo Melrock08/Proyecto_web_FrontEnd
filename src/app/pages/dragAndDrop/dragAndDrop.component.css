@@ -1,0 +1,16 @@
+.drag-drop-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.sidebar {
+  flex: 0 0 200px;
+  /* z-index se maneja en el componente del sidebar */
+}
+
+.canvas {
+  flex: 1;
+  /* z-index se maneja en el componente del diagrama */
+}

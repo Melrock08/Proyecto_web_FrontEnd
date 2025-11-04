@@ -1,0 +1,87 @@
+<div class="diagram-wrapper">
+  <!-- Toolbar superior -->
+  <div class="diagram-toolbar">
+    <div class="toolbar-left">
+      <h2>Editor de Diagrama</h2>
+      <span class="element-counter" *ngIf="diagramElements.length > 0">
+        {{ diagramElements.length }} elemento(s)
+      </span>
+    </div>
+    <div class="toolbar-actions">
+      <button
+        class="btn btn-primary"
+        (click)="downloadJSON()"
+        [disabled]="diagramElements.length === 0"
+        title="Exportar diagrama a JSON"
+      >
+        💾 Exportar JSON
+      </button>
+      <button
+        class="btn btn-danger"
+        (click)="clearDiagram()"
+        [disabled]="diagramElements.length === 0"
+        title="Limpiar todo el diagrama"
+      >
+        🗑️ Limpiar Todo
+      </button>
+    </div>
+  </div>
+
+  <!-- Lienzo del diagrama -->
+  <div
+    #diagramContainer
+    id="diagram-canvas"
+    class="diagram-canvas"
+    cdkDropList
+    [cdkDropListConnectedTo]="['sidebar-list']"
+    (cdkDropListDropped)="onElementDropped($event)"
+  >
+    <!-- Elementos del diagrama -->
+    <div
+      *ngFor="let element of diagramElements"
+      [id]="element.id"
+      class="diagram-element"
+      [class.element-inicio]="element.type === 'inicio'"
+      [class.element-proceso]="element.type === 'proceso'"
+      [class.element-decision]="element.type === 'decision'"
+      [class.element-fin]="element.type === 'fin'"
+      [style.left.px]="element.position.x"
+      [style.top.px]="element.position.y"
+      [style.width.px]="element.style.width"
+      [style.height.px]="element.style.height"
+      [style.backgroundColor]="element.style.backgroundColor"
+    >
+      <span class="element-label">{{ element.label }}</span>
+      <button
+        class="delete-btn"
+        (click)="deleteElement(element.id)"
+        title="Eliminar elemento"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- Mensaje inicial cuando no hay elementos -->
+    <div class="empty-state" *ngIf="diagramElements.length === 0">
+      <div class="empty-state-content">
+        <div class="empty-icon">📊</div>
+        <h3>Comienza tu diagrama</h3>
+        <p>Arrastra elementos desde el sidebar para empezar</p>
+        <div class="empty-tips">
+          <div class="tip-item">
+            <span class="tip-icon">🖱️</span>
+            <span>Arrastra elementos al lienzo</span>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">🔗</span>
+            <span>Conecta elementos entre sí</span>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">💾</span>
+            <span>Exporta tu diagrama</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

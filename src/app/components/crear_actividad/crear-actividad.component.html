@@ -1,0 +1,106 @@
+<!-- Contenedor principal -->
+<div class="flex items-center justify-center animate-fadeIn">
+  <!-- Tarjeta del formulario -->
+  <div
+    class="relative w-[420px] bg-slate-50/80 backdrop-blur-md border border-slate-200 shadow-lg text-slate-800 p-8 space-y-6 transition-all duration-500 ease-in-out"
+  >
+    <!-- Título -->
+    <div class="text-center space-y-1">
+      <h2 class="text-2xl font-bold text-emerald-600 tracking-tight">
+        Crear Actividad
+      </h2>
+      <p class="text-sm text-slate-500">
+        Ingresa la información de la nueva actividad del proceso
+      </p>
+    </div>
+
+    <!-- Formulario -->
+    <form (ngSubmit)="crearActividad()" class="space-y-5 text-left">
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">
+          Nombre
+        </label>
+        <input
+          [(ngModel)]="actividad.nombre"
+          name="nombre"
+          type="text"
+          placeholder="Ej: Revisión de documentos"
+          class="w-full px-4 py-2.5 rounded-md bg-white/70 border border-slate-300 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-300"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">
+          Descripción
+        </label>
+        <textarea
+          [(ngModel)]="actividad.descripcion"
+          name="descripcion"
+          rows="3"
+          placeholder="Describe brevemente la actividad..."
+          class="w-full px-4 py-2.5 rounded-md bg-white/70 border border-slate-300 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-300"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">
+          Tipo
+        </label>
+        <input
+          [(ngModel)]="actividad.tipo"
+          name="tipo"
+          type="text"
+          placeholder="Ej: Manual, Automática..."
+          class="w-full px-4 py-2.5 rounded-md bg-white/70 border border-slate-300 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-300"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-600 mb-1">
+            ID del Rol
+          </label>
+          <input
+            [(ngModel)]="actividad.idRol"
+            name="idRol"
+            type="string"
+            placeholder="Ej: 1"
+            class="w-full px-4 py-2.5 rounded-md bg-white/70 border border-slate-300 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-300"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-600 mb-1">
+            ID del Proceso
+          </label>
+          <input
+            [(ngModel)]="actividad.idProceso"
+            name="idProceso"
+            type="string"
+            placeholder="Ej: 1"
+            class="w-full px-4 py-2.5 rounded-md bg-white/70 border border-slate-300 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-300"
+          />
+        </div>
+      </div>
+
+      <!-- Botón principal -->
+      <button
+        type="submit"
+        [disabled]="loading"
+        class="w-full py-3 rounded-md bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-semibold shadow-md transition-all duration-300 disabled:opacity-50"
+      >
+        {{ loading ? 'Creando...' : 'Crear Actividad' }}
+      </button>
+    </form>
+
+    <!-- Mensajes de estado -->
+    <div class="text-center">
+      <p *ngIf="successMsg" class="text-emerald-600 mt-4 text-sm font-medium">
+        {{ successMsg }}
+      </p>
+      <p *ngIf="errorMsg" class="text-red-500 mt-4 text-sm font-medium">
+        {{ errorMsg }}
+      </p>
+    </div>
+  </div>
+</div>

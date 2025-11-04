@@ -1,8 +1,10 @@
 export class Actividad {
-    constructor(
-        public idActividad: number,
-        public nombre: string,
-        public descripcion: string,
-        public tipo: string
-    ){}
+  constructor(
+    public nombre: string,
+    public descripcion: string,
+    public tipo: string,
+    public idRol: string,
+    public idProceso: string,
+    public idActividad?: number
+  ) {}
 }

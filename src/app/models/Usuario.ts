@@ -1,12 +1,10 @@
-import { Empresa } from './Empresa';
-
 export class Usuario {
-  constructor(
-    public idUsuario: number,
+  constructor(   
     public nombre: string,
     public correo: string,
-    public rolSistema: string,
-    public empresa?: Empresa
-  ){}
+    public contrasena: string,
+    public rolSistema?: string,
+    public idEmpresa?: number,
+    public idUsuario?: number
+  ) {}
 }
-

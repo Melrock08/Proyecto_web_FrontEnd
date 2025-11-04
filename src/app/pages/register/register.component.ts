@@ -1,35 +1,71 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { UsuarioService } from '../../services/usuario.service';
-import { Usuario } from '../../models/Usuario';
-import { FormsModule } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+import { CrearEmpresaComponent } from '../../components/crear_empresa/crear-empresa.component';
+import { CrearUsuarioComponent } from '../../components/crear_usuario/crear-usuario.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 
+import { EmpresaService } from '../../services/empresa.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
-  selector: 'app-registro',
+  selector: 'app-registrar-admin',
   standalone: true,
-  imports: [FormsModule, CommonModule, FooterComponent],
+  imports: [CommonModule, FormsModule, RouterModule, CrearEmpresaComponent, CrearUsuarioComponent, FooterComponent],
   templateUrl: './register.component.html'
 })
-export class RegistroComponent {
-  usuario = new Usuario(0, '', '', 'USUARIO');
-  contrasena: string = '';
-  mensaje: string | null = null;
+export class RegisterComponent {
+  @ViewChild(CrearEmpresaComponent) crearEmpresaComp!: CrearEmpresaComponent;
+  @ViewChild(CrearUsuarioComponent) crearUsuarioComp!: CrearUsuarioComponent;
 
-  constructor(private usuarioService: UsuarioService, private router: Router) {}
+  mensaje = '';
+  cargando = false;
+
+  constructor(
+    private empresaService: EmpresaService,
+    private usuarioService: UsuarioService,
+    private router: Router
+  ) {}
 
   onRegistrar() {
-    this.usuarioService.registrar(this.usuario, this.contrasena).subscribe({
-      next: (res) => {
-        console.log('Usuario registrado:', res);
-        this.mensaje = 'Registro exitoso. Ya puedes iniciar sesión.';
-        setTimeout(() => this.router.navigate(['/login']), 2000);
+    if (!this.crearEmpresaComp || !this.crearUsuarioComp) {
+      this.mensaje = 'Componentes no inicializados.';
+      return;
+    }
+
+    const empresaData = this.crearEmpresaComp.getData();
+    const usuarioData = this.crearUsuarioComp.getUsuarioData();
+    const contrasena = this.crearUsuarioComp.getContrasena();
+
+    this.cargando = true;
+    this.empresaService.crearEmpresa(empresaData as any).subscribe({
+      next: (empresaCreada) => {
+        const idEmpresa = (empresaCreada as any).idEmpresa ?? (empresaCreada as any).id;
+
+        const usuarioPayload = {
+          ...usuarioData,
+          idEmpresa: idEmpresa
+        };
+
+        this.usuarioService.registrar(usuarioPayload as any, contrasena, idEmpresa).subscribe({
+          next: () => {
+            this.mensaje = 'Registro completado correctamente.';
+            this.cargando = false;
+            this.router.navigate(['/dashboard']);
+          },
+          error: (err) => {
+            console.error(err);
+            this.mensaje = 'Error al registrar el usuario.';
+            this.cargando = false;
+          }
+        });
       },
       error: (err) => {
         console.error(err);
-        this.mensaje = 'Ocurrió un error al registrar. Inténtalo de nuevo.';
+        this.mensaje = 'Error al crear la empresa.';
+        this.cargando = false;
       }
     });
   }

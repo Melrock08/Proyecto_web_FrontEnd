@@ -1,8 +1,8 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { ProcesoService } from '../../../services/proceso.service';
-import { Proceso } from '../../../models/Proceso';
+import { ProcesoService } from '../../services/proceso.service';
+import { Proceso } from '../../models/Proceso';
 
 @Component({
   selector: 'app-listar-procesos',
@@ -26,25 +26,23 @@ export class ListarProcesosComponent implements OnInit {
   }
 
   private cargarProcesos(): void {
-    this.procesoService.getProcesos().subscribe({
-      next: (data) => {
+    this.cargando.set(true);
+    this.error.set(null);
+
+    this.procesoService.getProcesos()
+      .then((data) => {
         this.procesos.set(data);
         this.cargando.set(false);
-      },
-      error: (err) => {
+      })
+      .catch((err) => {
         console.error('Error al cargar procesos:', err);
         this.error.set('No se pudieron cargar los procesos.');
         this.cargando.set(false);
-      }
-    });
-  }
-
-  crearProceso(): void {
-    this.router.navigate(['/procesos/nuevo']);
+      });
   }
 
   editarProceso(id: number): void {
-    this.router.navigate(['/procesos', id]);
+    this.router.navigate(['/editar']);
   }
-
 }
+

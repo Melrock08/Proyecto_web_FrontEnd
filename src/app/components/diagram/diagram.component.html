@@ -1,0 +1,67 @@
+<div
+  #canvas
+  class="w-full h-full relative overflow-auto bg-white [background-image:radial-gradient(#e6e9ef_1px,transparent_1px)] [background-size:20px_20px] select-none"
+  (dragover)="allowDrop($event)"
+  (drop)="onDrop($event)"
+>
+  <ng-container *ngFor="let n of nodes">
+    <div
+      [id]="n.id"
+      class="absolute group"
+      [style.left.px]="leftFor(n)"
+      [style.top.px]="topFor(n)"
+      [style.zIndex]="(movingNode === n) ? 60 : 10"
+      (pointerdown)="startMove(n, $event)"
+      (click)="seleccionarNodo(n, $event)"
+      style="touch-action: none;"
+    >
+      <div
+        class="transition-transform duration-150 ease-out will-change-transform relative"
+        [class.shadow-2xl]="n._dx !== undefined || n._dy !== undefined"
+        [style.transform]="'translate(' + (n._dx ?? 0) + 'px,' + (n._dy ?? 0) + 'px)'"
+      >
+        <!-- Botón eliminar -->
+        <button
+          (click)="eliminarNodo(n.id); $event.stopPropagation();"
+          class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+          title="Eliminar"
+        >
+          ✕
+        </button>
+
+        <!-- INICIO / FIN -->
+        <div
+          *ngIf="n.tipo === 'inicio' || n.tipo === 'fin'"
+          class="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-md"
+          [ngClass]="n.tipo === 'inicio' ? 'bg-green-500' : 'bg-red-500'"
+        >
+          <div class="text-sm font-semibold">{{ n.tipo === 'inicio' ? 'Start' : 'End' }}</div>
+        </div>
+
+        <!-- ACTIVIDAD -->
+        <div *ngIf="n.tipo === 'actividad'"
+          class="w-[160px] h-[72px] rounded-lg bg-white border-2 border-blue-500 shadow-md flex items-center justify-center px-3 relative handle"
+        >
+          <div class="text-center">
+            <div class="text-sm font-medium text-slate-800">{{ n.label }}</div>
+            <div *ngIf="n.data" class="text-xs text-gray-500 mt-1 truncate">{{ n.data.nombre }}</div>
+          </div>
+        </div>
+
+        <!-- GATEWAY -->
+        <div *ngIf="n.tipo === 'gateway'"
+          class="w-[100px] h-[100px] flex items-center justify-center relative handle"
+        >
+          <div class="relative">
+            <div class="w-[80px] h-[80px] rotate-45 border border-yellow-400 bg-transparent shadow-md"></div>
+            <div class="absolute inset-0 flex items-center justify-center -rotate-45 pointer-events-none">
+              <div class="text-sm font-medium text-yellow-600 text-center">{{ n.label }}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+</div>
+

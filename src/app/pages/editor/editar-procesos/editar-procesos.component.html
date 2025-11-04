@@ -1,0 +1,60 @@
+<div class="relative h-screen w-screen bg-slate-50">
+
+  <!-- Canvas (fondo) -->
+  <div class="absolute inset-0 z-0">
+    <app-diagram
+  class="w-full h-full"
+  (nodoSeleccionado)="onNodoSeleccionado($event)"
+></app-diagram>
+
+  </div>
+
+  <!-- Top toolbar (centro/izq) -->
+  <div class="absolute left-0 right-0 top-4 z-40 flex items-center justify-between px-6">
+    <!-- left: back/title -->
+    <div class="flex items-center gap-4">
+      <button 
+      (click)="irAtras()"
+      class="rounded-full p-2 bg-white/90 shadow-sm">
+        <!-- icon back -->
+        ←
+      </button>
+      <div class="text-lg font-semibold text-slate-800">Editor de procesos</div>
+      <span class="ml-2 text-sm text-green-600 bg-green-50 px-2 py-1 rounded-full">Activo</span>
+      <span class="ml-4 text-sm text-slate-500">Autoguardado</span>
+    </div>
+
+    <!-- center: controls -->
+    <div class="flex items-center gap-3 bg-white/90 rounded-xl px-3 py-2 shadow-sm">
+      <button class="px-2 py-1 rounded hover:bg-slate-100">↺</button>
+      <button class="px-2 py-1 rounded hover:bg-slate-100">↻</button>
+      <button class="px-2 py-1 rounded hover:bg-slate-100">🔍</button>x
+      <div class="text-sm px-2">100%</div>
+      <button class="px-2 py-1 rounded hover:bg-slate-100">↔</button>
+    </div>
+
+    <!-- right: actions -->
+    <div class="flex items-center gap-3">
+      <button class="bg-white/90 px-3 py-1 rounded shadow-sm">Save</button>
+      <button class="bg-blue-600 text-white px-3 py-1 rounded shadow">Publish</button>
+    </div>
+  </div>
+
+  <!-- Sidebar completamente pegada -->
+<div class="absolute left-0 top-[72px] z-50 h-[calc(100%-72px)]">
+  <app-sidebar></app-sidebar>
+</div>
+
+
+  <!-- Properties fijado a la derecha (no recortado) -->
+<div class="fixed right-0 top-[72px] z-50 h-[calc(100%-72px)]">
+  <app-property-panel
+    [tipoSeleccionado]="selectedTipo"
+    [data]="selectedData"
+    [nodeId]="selectedNodeId"
+    (guardarElemento)="onGuardarElemento($event)"
+    (cancelarEdicion)="onCancelarEdicion($event)"
+  ></app-property-panel>
+</div>
+</div>
+

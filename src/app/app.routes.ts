@@ -1,13 +1,15 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
-import { RegistroComponent } from './pages/register/register.component';
+import { RegisterComponent } from './pages/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
-import { ListarProcesosComponent } from './pages/procesos/listar-procesos/listar-procesos.component'; 
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { EditarProcesosComponent } from './pages/editor/editar-procesos/editar-procesos.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'registro', component: RegistroComponent },
-  { path: 'procesos', component: ListarProcesosComponent } 
+  { path: 'registro', component: RegisterComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'editar', component: EditarProcesosComponent }
 ];
 

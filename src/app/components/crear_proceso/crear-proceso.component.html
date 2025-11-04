@@ -1,0 +1,87 @@
+<!-- Contenedor principal sin fondo -->
+<div class="flex items-center justify-center animate-fadeIn">
+
+
+  <!-- Tarjeta del formulario -->
+  <div
+    class="bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-md rounded-2xl shadow-2xl w-[420px] p-8 text-white text-center space-y-6 border border-white/10 relative"
+  >
+    <!-- Botón de cierre -->
+    <button
+      (click)="cerrarManual()"
+      class="absolute top-3 right-4 text-gray-400 hover:text-teal-400 text-2xl font-bold transition"
+    >
+      ×
+    </button>
+
+    <!-- Título -->
+    <h2 class="text-2xl font-extrabold text-teal-400">Crear Proceso</h2>
+    <p class="text-sm text-gray-300 -mt-3">
+      Define los datos del nuevo proceso que deseas registrar
+    </p>
+
+    <!-- Formulario -->
+    <form (ngSubmit)="crearProceso()" class="space-y-4 text-left">
+      <div>
+        <label class="text-sm text-gray-300">Nombre</label>
+        <input
+          [(ngModel)]="proceso.nombre"
+          name="nombre"
+          type="text"
+          placeholder="Ej: Proceso de Ventas"
+          class="w-full mt-1 px-3 py-2 rounded-lg bg-slate-700/70 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+        />
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-300">Descripción</label>
+        <textarea
+          [(ngModel)]="proceso.descripcion"
+          name="descripcion"
+          rows="3"
+          placeholder="Describe brevemente el proceso..."
+          class="w-full mt-1 px-3 py-2 rounded-lg bg-slate-700/70 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-300">Categoría</label>
+        <input
+          [(ngModel)]="proceso.categoria"
+          name="categoria"
+          type="text"
+          placeholder="Ej: Comercial, Producción..."
+          class="w-full mt-1 px-3 py-2 rounded-lg bg-slate-700/70 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+        />
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-300">Estado</label>
+        <select
+          [(ngModel)]="proceso.estado"
+          name="estado"
+          class="w-full mt-1 px-3 py-2 rounded-lg bg-slate-700/70 text-white focus:outline-none focus:ring-2 focus:ring-teal-400"
+        >
+          <option value="borrador">Borrador</option>
+          <option value="publicado">Publicado</option>
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loading"
+        class="w-full py-2 mt-4 rounded-lg bg-teal-500 hover:bg-teal-400 text-white font-semibold shadow-md transition disabled:opacity-50"
+      >
+        {{ loading ? 'Creando...' : 'Crear Proceso' }}
+      </button>
+    </form>
+
+    <!-- Mensajes de estado -->
+    <p *ngIf="successMsg" class="text-green-400 mt-3 text-sm">
+      {{ successMsg }}
+    </p>
+    <p *ngIf="errorMsg" class="text-red-400 mt-3 text-sm">
+      {{ errorMsg }}
+    </p>
+  </div>
+</div>

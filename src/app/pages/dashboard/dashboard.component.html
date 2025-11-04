@@ -1,0 +1,18 @@
+<div class="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white p-8">
+  <div class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8">
+    <!-- 🔹 Header con botón de navegación -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-teal-400">Gestión de Procesos</h1>
+
+      <button
+        (click)="irANuevoProceso()"
+        class="bg-teal-500 hover:bg-teal-400 text-white font-semibold px-5 py-2 rounded-lg shadow-md transition"
+      >
+        + Nuevo Proceso
+      </button>
+    </div>
+
+    <!-- 🔹 Lista de procesos -->
+    <app-listar-procesos></app-listar-procesos>
+  </div>
+</div>

@@ -1,56 +1,48 @@
 <div class="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white">
+  <!-- Contenedor central -->
   <div class="flex flex-1 items-center justify-center p-6">
-    <div class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 w-full max-w-md p-8 sm:p-10 transition-transform hover:scale-[1.01] duration-300">
-
+    <div
+      class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 w-full max-w-3xl p-8 sm:p-10 transition-transform hover:scale-[1.01] duration-300"
+    >
+      <!-- Encabezado -->
       <div class="text-center mb-8">
-        <img src="assets/logo.png" alt="Logo" class="mx-auto h-14 w-14 mb-4 rounded-full border border-white/30 shadow-md">
-        <h2 class="text-3xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">
-          Crear Cuenta
+        <img
+          src="assets/logo.png"
+          alt="Logo"
+          class="mx-auto h-14 w-14 mb-4 rounded-full border border-white/30 shadow-md"
+        />
+        <h2
+          class="text-3xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300"
+        >
+          Registrar Empresa y Usuario Admin
         </h2>
-        <p class="text-sm text-gray-300">Regístrate para comenzar a gestionar tus procesos empresariales</p>
+        <p class="text-sm text-gray-300">
+          Completa el formulario para crear tu empresa y el usuario administrador principal.
+        </p>
       </div>
 
-      <form (ngSubmit)="onRegistrar()" class="space-y-5">
-        <div>
-          <label for="nombre" class="block text-sm font-semibold text-gray-300 mb-2">Nombre</label>
-          <input id="nombre" name="nombre" [(ngModel)]="usuario.nombre" required
-                 class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 outline-none">
+      <!-- Formulario -->
+      <form (ngSubmit)="onRegistrar()" class="space-y-8">
+        <!-- Subcomponentes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <app-crear-empresa></app-crear-empresa>
+          <app-crear-usuario></app-crear-usuario>
         </div>
 
-        <div>
-          <label for="correo" class="block text-sm font-semibold text-gray-300 mb-2">Correo electrónico</label>
-          <input id="correo" type="email" name="correo" [(ngModel)]="usuario.correo" required
-                 class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 outline-none">
+        <!-- Botón registrar -->
+        <div class="text-center">
+          <button
+            type="submit"
+            [disabled]="cargando"
+            class="w-full md:w-auto px-10 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {{ cargando ? 'Registrando...' : 'Registrar Empresa y Usuario' }}
+          </button>
         </div>
-
-        <div>
-          <label for="contrasena" class="block text-sm font-semibold text-gray-300 mb-2">Contraseña</label>
-          <input id="contrasena" type="password" name="contrasena" [(ngModel)]="contrasena" required
-                 class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 outline-none">
-        </div>
-
-        <div>
-          <label for="rol" class="block text-sm font-semibold text-gray-300 mb-2">Rol</label>
-          <select id="rol" name="rolSistema" [(ngModel)]="usuario.rolSistema"
-                  class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 outline-none">
-            <option value="USUARIO" class="text-black">Usuario</option>
-            <option value="ADMIN" class="text-black">Administrador</option>
-            <option value="PROVEEDOR" class="text-black">Proveedor</option>
-          </select>
-        </div>
-
-        <button type="submit"
-                class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-emerald-500/40 hover:scale-[1.02] transition-all duration-300">
-          Registrarse
-        </button>
-
-        <p *ngIf="mensaje" class="text-emerald-400 text-center text-sm mt-2">{{ mensaje }}</p>
       </form>
-      <p class="text-center text-sm text-gray-400 mt-8">
-        ¿Ya tienes cuenta?
-        <a routerLink="/login" class="text-emerald-400 hover:underline font-semibold">Inicia sesión aquí</a>
-      </p>
     </div>
   </div>
+
+  <!-- Footer -->
   <app-footer></app-footer>
 </div>

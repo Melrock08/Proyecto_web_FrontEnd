@@ -23,7 +23,7 @@ export class LoginComponent {
     this.usuarioService.login(this.loginData).subscribe({
       next: (usuario) => {
         console.log('Sesión iniciada:', usuario);
-        this.router.navigate(['/procesos']);
+        this.router.navigate(['/dashboard']);
       },
       error: () => {
         this.errorMsg = 'Credenciales incorrectas. Intente nuevamente.';

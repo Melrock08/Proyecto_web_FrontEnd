@@ -1,6 +1,7 @@
 export class Gateway {
-    constructor(
-        public idGateway: number,
-        public tipo: string
-    ){}
+  constructor(
+    public tipo: string,
+    public idProceso: string,
+    public idGateway?: number
+  ) {}
 }

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosError } from 'axios';
-import { from, Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
 import { Proceso } from '../models/Proceso';
 
 @Injectable({
@@ -10,52 +8,56 @@ import { Proceso } from '../models/Proceso';
 export class ProcesoService {
   private readonly apiUrl = 'http://localhost:8080/api/procesos';
 
-  // obtener todos los procesos
-  getProcesos(): Observable<Proceso[]> {
-    return from(axios.get<Proceso[]>(this.apiUrl)).pipe(
-      map(response => response.data),
-      catchError(this.handleError)
-    );
+  /**
+   * Función para construir el cuerpo de la petición
+   */
+  private buildBody(proceso: Proceso) {
+    return {
+      nombre: proceso.nombre,
+      descripcion: proceso.descripcion,
+      categoria: proceso.categoria,
+      estado: proceso.estado === 'borrador' ? 'Activo' : proceso.estado,
+      idEmpresa: proceso.idEmpresa ?? 5
+    };
   }
 
-  // obtener procesos por empresa
-  getProcesosPorEmpresa(idEmpresa: number): Observable<Proceso[]> {
-    return from(axios.get<Proceso[]>(`${this.apiUrl}/empresa/${idEmpresa}`)).pipe(
-      map(res => res.data),
-      catchError(this.handleError)
-    );
+  /**
+   * Listar todos los procesos
+   */
+  getProcesos(): Promise<Proceso[]> {
+    return axios.get<Proceso[]>(this.apiUrl)
+      .then(response => response.data)
+      .catch(error => this.handleError<Proceso[]>(error));
   }
 
-  // crear proceso
-  crearProceso(proceso: Proceso): Observable<Proceso> {
-    return from(axios.post<Proceso>(this.apiUrl, proceso)).pipe(
-      map(res => res.data),
-      catchError(this.handleError)
-    );
+  /**
+   * Crear proceso
+   */
+  crearProceso(proceso: Proceso): Promise<Proceso> {
+    const body = this.buildBody(proceso);
+    return axios.post<Proceso>(this.apiUrl, body)
+      .then(response => response.data)
+      .catch(error => this.handleError<Proceso>(error));
   }
 
-  // editar proceso
-  editarProceso(id: number, proceso: Proceso): Observable<Proceso> {
-    return from(axios.put<Proceso>(`${this.apiUrl}/${id}`, proceso)).pipe(
-      map(res => res.data),
-      catchError(this.handleError)
-    );
+  /**
+   * Editar proceso por ID
+   */
+  actualizarProceso(id: number, proceso: Proceso): Promise<Proceso> {
+    const body = this.buildBody(proceso);
+    return axios.put<Proceso>(`${this.apiUrl}/${id}`, body)
+      .then(response => response.data)
+      .catch(error => this.handleError<Proceso>(error));
   }
 
-  // obtener proceso por ID
-  getProceso(id: number): Observable<Proceso> {
-    return from(axios.get<Proceso>(`${this.apiUrl}/${id}`)).pipe(
-      map(res => res.data),
-      catchError(this.handleError)
-    );
-  }
-
-  // 💥 Manejo centralizado de errores
-  private handleError(error: AxiosError) {
+  /**
+   * Manejo centralizado de errores
+   */
+  private handleError<T>(error: AxiosError): Promise<T> {
     const msg = error.response?.data
       ? JSON.stringify(error.response.data)
       : error.message;
     console.error('Error HTTP:', msg);
-    return throwError(() => new Error('Error en la petición HTTP.'));
+    return Promise.reject(new Error('Error en la petición HTTP.'));
   }
 }

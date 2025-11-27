@@ -237,18 +237,18 @@ makeNodeConnectable(node: NodeModel) {
       if ((fromNode.tipo === 'actividad' || fromNode.tipo === 'gateway') &&
           (toNode.tipo   === 'actividad' || toNode.tipo   === 'gateway')) {
 
-        const parseMaybeNumber = (idStr: string | undefined): string => {
-          if (!idStr) return '';
+        const parseMaybeNumber = (idStr: string | undefined): number => {
+          if (!idStr) return 0;
           const v = Number(idStr);
-          return Number.isFinite(v) ? idStr : '';
+          return Number.isFinite(v) ? v : 0;
         };
 
         const edge = new Edge(
-        '1', 
-          fromNode.tipo === 'actividad' ? parseMaybeNumber(fromNode.id) : '',
-          fromNode.tipo === 'gateway'   ? parseMaybeNumber(fromNode.id) : '',
-          toNode.tipo   === 'actividad' ? parseMaybeNumber(toNode.id)   : '',
-          toNode.tipo   === 'gateway'   ? parseMaybeNumber(toNode.id)   : ''
+        0,
+          fromNode.tipo === 'actividad' ? parseMaybeNumber(fromNode.id) : 0,
+          fromNode.tipo === 'gateway'   ? parseMaybeNumber(fromNode.id) : 0,
+          toNode.tipo   === 'actividad' ? parseMaybeNumber(toNode.id)   : 0,
+          toNode.tipo   === 'gateway'   ? parseMaybeNumber(toNode.id)   : 0
         );
 
         console.log('[jsPlumb] Llamando edgeService.crear con', edge);

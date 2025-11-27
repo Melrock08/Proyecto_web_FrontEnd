@@ -1,7 +1,8 @@
 export class Login {
-    constructor(
-        public correo: string | null,
-        public contrasena: string | null
-    ){}
+  constructor(
+    public correo: string,
+    public contrasena: string
+  ) {}
 }
+
 

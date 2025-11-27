@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
 import { Empresa } from '../../models/Empresa';
 
 @Component({
@@ -20,3 +21,4 @@ export class CrearEmpresaComponent {
     return this.empresa;
   }
 }
+

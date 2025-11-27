@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { UsuarioService } from '../../services/usuario.service';
-import { Login } from '../../models/Login';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+import { UsuarioService } from '../../services/usuario.service';
+import { Login } from '../../models/Login';
 import { FooterComponent } from '../../components/footer/footer.component';
 
 @Component({
@@ -14,12 +15,16 @@ import { FooterComponent } from '../../components/footer/footer.component';
 })
 export class LoginComponent {
   loginData = new Login('', '');
-
   errorMsg: string | null = null;
 
-  constructor(private usuarioService: UsuarioService, private router: Router) {}
+  constructor(
+    private usuarioService: UsuarioService,
+    private router: Router
+  ) {}
 
   onLogin() {
+    this.errorMsg = null;
+
     this.usuarioService.login(this.loginData).subscribe({
       next: (usuario) => {
         console.log('Sesión iniciada:', usuario);

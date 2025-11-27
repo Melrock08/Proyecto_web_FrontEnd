@@ -29,44 +29,53 @@ export class RegisterComponent {
     private router: Router
   ) {}
 
-  onRegistrar() {
-    if (!this.crearEmpresaComp || !this.crearUsuarioComp) {
-      this.mensaje = 'Componentes no inicializados.';
-      return;
-    }
-
-    const empresaData = this.crearEmpresaComp.getData();
-    const usuarioData = this.crearUsuarioComp.getUsuarioData();
-    const contrasena = this.crearUsuarioComp.getContrasena();
-
-    this.cargando = true;
-    this.empresaService.crearEmpresa(empresaData as any).subscribe({
-      next: (empresaCreada) => {
-        const idEmpresa = (empresaCreada as any).idEmpresa ?? (empresaCreada as any).id;
-
-        const usuarioPayload = {
-          ...usuarioData,
-          idEmpresa: idEmpresa
-        };
-
-        this.usuarioService.registrar(usuarioPayload as any, contrasena, idEmpresa).subscribe({
-          next: () => {
-            this.mensaje = 'Registro completado correctamente.';
-            this.cargando = false;
-            this.router.navigate(['/dashboard']);
-          },
-          error: (err) => {
-            console.error(err);
-            this.mensaje = 'Error al registrar el usuario.';
-            this.cargando = false;
-          }
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        this.mensaje = 'Error al crear la empresa.';
-        this.cargando = false;
-      }
-    });
+// src/.../register.component.ts (modificar onRegistrar)
+onRegistrar() {
+  if (!this.crearEmpresaComp || !this.crearUsuarioComp) {
+    this.mensaje = 'Componentes no inicializados.';
+    return;
   }
+
+  const empresaData = this.crearEmpresaComp.getData();
+  const usuarioData = this.crearUsuarioComp.getUsuarioData();
+  const contrasena = this.crearUsuarioComp.getContrasena();
+
+  this.cargando = true;
+  this.empresaService.crearEmpresa(empresaData as any).subscribe({
+    next: (empresaCreada) => {
+      // En vez de enviar solo idEmpresa, incorporamos el objeto empresa creado en el payload
+      const usuarioPayload = {
+        nombre: usuarioData.nombre,
+        correo: usuarioData.correo,
+        contrasena: contrasena,
+        rolSistema: usuarioData.rolSistema ?? 'ADMIN',
+        empresa: {
+          nombreEmpresa: empresaCreada.nombreEmpresa ?? empresaCreada.nombreEmpresa,
+          nit: empresaCreada.nit,
+          correoContacto: empresaCreada.correoContacto
+        }
+      };
+
+      this.usuarioService.registrar(usuarioPayload as any).subscribe({
+        next: () => {
+          this.mensaje = 'Registro completado correctamente.';
+          this.cargando = false;
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error(err);
+          this.mensaje = 'Error al registrar el usuario.';
+          this.cargando = false;
+        }
+      });
+    },
+    error: (err) => {
+      console.error(err);
+      this.mensaje = 'Error al crear la empresa.';
+      this.cargando = false;
+    }
+  });
 }
+
+}
+ 
